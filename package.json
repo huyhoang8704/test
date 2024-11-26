@@ -27,6 +27,7 @@
     "pdfkit": "^0.15.0",
     "pg": "^8.11.5",
     "project_he": "file:",
+    "sequelize": "^6.37.5",
     "session": "^0.1.0",
     "sharp": "^0.33.5",
     "swagger-jsdoc": "^6.2.8",
