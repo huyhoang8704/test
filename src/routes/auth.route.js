@@ -28,4 +28,6 @@ router.post('/login', [
 
 router.post('/logout', authController.logout);
 
+router.get('/history-printing', authController.historyPrinting);
+
 module.exports = router;

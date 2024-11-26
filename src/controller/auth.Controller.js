@@ -160,6 +160,27 @@ class AuthController {
             data: null
         });
     }
+
+    async historyPrinting(req, res) {
+        try {
+            const sid  = req.body.sid;
+            // console.log(sid)
+            // Gọi Service xử lý logic lấy dữ liệu
+            const result = await UserService.getHistoryPrinting({ sid });
+    
+            return res.status(result.status).json({
+                status: result.status,
+                msg: result.msg,
+                data: result.data
+            });
+        } catch (err) {
+            res.status(err.status || 500).json({
+                status: err.status || 500,
+                msg: err.msg || 'Internal Server Error',
+                data: err.data || null
+            });
+        }
+    }
 }
 
 module.exports = new AuthController;
