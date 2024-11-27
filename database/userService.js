@@ -33,10 +33,11 @@ class UserService {
         })
     }
     async getHistoryPrinting(sid) {
-        const id = sid.sid
-        console.log(id)   // ID student
-        return new Promise((resolve, reject) => {
-            client.query(`
+        const id = sid.sid; // Lấy ID từ input
+        console.log("Student ID:", id); // Log ID sinh viên để kiểm tra
+    
+        try {
+            const [rows] = await client.query(`
                 SELECT 
                     T.Tstart_time, 
                     T.Tend_time, 
@@ -49,30 +50,33 @@ class UserService {
                 JOIN DOCUMENT D ON T.DID = D.DID
                 JOIN PRINTER P ON T.PID = P.PID
                 WHERE T.SID = ?
-            `, [id], (err, res) => {
-                if (err) {
-                    console.error("Error during query:", err); // Log lỗi chi tiết
-                    reject({
-                        status: 400,
-                        msg: err.message,
-                        data: null
-                    });
-                } else if (res.length === 0) {
-                    resolve({
-                        status: 404,
-                        msg: 'No printing history found for the student',
-                        data: null
-                    });
-                } else {
-                    resolve({
-                        status: 200,
-                        msg: 'Fetch success',
-                        data: res
-                    });
-                }
-            });
-        });
+            `, [id]);
+    
+            if (rows.length === 0) {
+                console.log("No records found for student ID:", id);
+                return {
+                    status: 404,
+                    msg: 'No printing history found for the student',
+                    data: null
+                };
+            } else {
+                console.log("Query successful, data:", rows);
+                return {
+                    status: 200,
+                    msg: 'Fetch success',
+                    data: rows
+                };
+            }
+        } catch (err) {
+            console.error("Error during query execution:", err); // Ghi log chi tiết lỗi
+            return {
+                status: 500,
+                msg: 'Internal Server Error',
+                data: null
+            };
+        }
     }
+    
     
     
 }

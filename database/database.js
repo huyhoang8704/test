@@ -1,19 +1,14 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
-// Setup pgAdmin4 and connect individual
-const client = mysql.createConnection({
+// Thiết lập kết nối
+const client = mysql.createPool({
     host: 'localhost',    // Địa chỉ máy chủ MySQL
     user: 'root',         // Tên người dùng MySQL
-    password: '080704', // Mật khẩu MySQL
-    database: 'printer_service'   // Tên database
-});
-
-client.connect((err) => {
-    if (err) {
-        console.error('Error connecting to MySQL:', err.stack);
-        return;
-    }
-    console.log('Connected to MySQL');
+    password: '080704',   // Mật khẩu MySQL
+    database: 'printer_service', // Tên database
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 module.exports = client;
